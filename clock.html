@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CS 3110 Exam 1</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        let idleMouseTimer;
+        let forceMouseHide = false;
+
+        document.body.style.cursor = "none";
+
+        document.body.addEventListener("mousemove", () => {
+          if (forceMouseHide) {
+            return;
+          }
+
+          document.body.style.cursor = "";
+
+          clearTimeout(idleMouseTimer);
+
+          idleMouseTimer = setTimeout(() => {
+            document.body.style.cursor = "none";
+
+            forceMouseHide = true;
+
+            setTimeout(() => {
+              forceMouseHide = false;
+            }, 200);
+          }, 1000);
+        });
+      });
+      function toggleFullscreen() {
+        if (document.fullscreenElement == null) {
+          document.body.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+      addEventListener("fullscreenchange", () => {
+        if (document.fullscreenElement) {
+          document.getElementById("fs").innerHTML = "fullscreen_exit";
+        } else {
+          document.getElementById("fs").innerHTML = "fullscreen";
+        }
+      });
+      function startTime() {
+        const today = new Date();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        m = checkTime(m);
+        document.getElementById("clock").innerHTML = today
+          .toLocaleTimeString("en-US", {
+            timeStyle: "short",
+          })
+          .replace(/ AM| PM/, "");
+        setTimeout(startTime, 500);
+      }
+
+      function checkTime(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 48;
+        color: white;
+        font-size: 36px;
+      }
+      html {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      body,
+      ::backdrop {
+        margin: 0;
+        height: 100%;
+        background: linear-gradient(223deg, #833ab4, #fd1d1d, #fcb045);
+        background-size: 600% 600%;
+        animation: BGAnim 38s ease infinite;
+      }
+      @keyframes BGAnim {
+        0% {
+          background-position: 99% 0%;
+        }
+        50% {
+          background-position: 2% 100%;
+        }
+        100% {
+          background-position: 99% 0%;
+        }
+      }
+      .fullscreen-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .header {
+        position: absolute;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .clock {
+        color: rgb(255, 255, 255);
+        font-family: "JetBrains Mono", monospace;
+        font-weight: bold;
+        font-size: 20vw;
+      }
+      .exam-info {
+        color: rgb(255, 255, 255);
+        font-family: Helvetica, sans-serif;
+        font-weight: 600;
+        font-size: 3.5vw;
+      }
+      .notice {
+        color: rgb(255, 255, 255);
+        font-family: Helvetica, sans-serif;
+        font-weight: 300;
+        font-size: 2.5vw;
+        max-width: 80vw;
+        margin-top: 1.25rem; /* 5 units */
+      }
+      .title {
+        margin: 1.25rem; /* 5 units */
+        /* margin-top: 0; */
+        font-weight: 600;
+        color: rgb(255, 255, 255);
+        font-family: Helvetica, sans-serif;
+        text-decoration: none;
+        font-size: 1.125rem; /* text-lg equivalent */
+        font-size: 24px;
+      }
+      .toggle {
+        margin: 1.125rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body onload="startTime()">
+    <div class="fullscreen-container">
+      <div class="clock" id="clock">16:43</div>
+      <div class="exam-info">Exam starts at 1:25 and ends at 2:15</div>
+      <div class="notice">We will not answer questions about exam content</div>
+    </div>
+    <div class="header">
+      <a href="" class="title">CS 3110 Exam 1 — Fall 2024</a>
+      <span
+        id="fs"
+        onclick="toggleFullscreen()"
+        class="material-symbols-outlined toggle"
+        >fullscreen</span
+      >
+    </div>
+  </body>
+</html>
