@@ -89,8 +89,9 @@
           });
 
         if (timerIntervalId) {
-          clearInterval(timerIntervalId);
+          location.reload();
         }
+        document.getElementById("btn").innerText = "refresh";
         updateTimer();
         timerIntervalId = setInterval(updateTimer, 100);
       }
@@ -111,6 +112,9 @@
         } else {
           clearInterval(timerIntervalId);
           document.getElementById("clock").innerText = "00:00";
+          document.getElementById("notice").innerText =
+            "Exam over, please put your pen down";
+          document.getElementById("end").innerText = "ended";
         }
       }
     </script>
@@ -212,15 +216,19 @@
       <div class="clock" id="current-time"></div>
       <div class="timer" id="clock">50:00</div>
       <div class="exam-info">
-        Started at <span class="time" id="start-time">N/A</span>, ending at
+        Started at <span class="time" id="start-time">N/A</span>,
+        <span id="end">ending</span> at
         <span class="time" id="end-time">N/A</span>
       </div>
-      <div class="notice">Good luck!</div>
+      <div class="notice" id="notice">Good luck!</div>
     </div>
     <div class="header">
       <a href="" class="title">CS 3110 Exam 2 — Fall 2024</a>
       <div>
-        <span onclick="startTimer()" class="material-symbols-outlined toggle"
+        <span
+          id="btn"
+          onclick="startTimer()"
+          class="material-symbols-outlined toggle"
           >play_arrow</span
         >
         <span
