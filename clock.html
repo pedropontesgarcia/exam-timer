@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CS 3110 Exam 1</title>
+    <title>CS 3110 Exam 2</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
@@ -31,6 +31,7 @@
           }, 1000);
         });
       });
+
       function toggleFullscreen() {
         if (document.fullscreenElement == null) {
           document.body.requestFullscreen();
@@ -38,6 +39,7 @@
           document.exitFullscreen();
         }
       }
+
       addEventListener("fullscreenchange", () => {
         if (document.fullscreenElement) {
           document.getElementById("fs").innerHTML = "fullscreen_exit";
@@ -45,24 +47,71 @@
           document.getElementById("fs").innerHTML = "fullscreen";
         }
       });
-      function startTime() {
-        const today = new Date();
-        let h = today.getHours();
-        let m = today.getMinutes();
-        m = checkTime(m);
-        document.getElementById("clock").innerHTML = today
-          .toLocaleTimeString("en-US", {
-            timeStyle: "short",
-          })
-          .replace(/ AM| PM/, "");
-        setTimeout(startTime, 500);
+
+      let timerIntervalId;
+      let clockIntervalId;
+      let startTime;
+      let duration;
+
+      function load() {
+        if (clockIntervalId) {
+          clearInterval(clockIntervalId);
+        }
+        updateClock();
+        clockIntervalId = setInterval(updateClock, 100);
       }
 
-      function checkTime(i) {
-        if (i < 10) {
-          i = "0" + i;
+      function updateClock() {
+        document.getElementById("current-time").innerText =
+          new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+      }
+
+      function startTimer() {
+        let d = 50;
+        duration = d * 60 * 1000;
+
+        startTime = Date.now();
+
+        const startDate = new Date(startTime);
+        const endDate = new Date(startTime + duration);
+        document.getElementById("start-time").innerText =
+          startDate.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        document.getElementById("end-time").innerText =
+          endDate.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+        if (timerIntervalId) {
+          clearInterval(timerIntervalId);
         }
-        return i;
+        updateTimer();
+        timerIntervalId = setInterval(updateTimer, 100);
+      }
+
+      function updateTimer() {
+        let currentTime = Date.now();
+        let elapsedTime = currentTime - startTime;
+
+        let remainingTime = duration - elapsedTime;
+
+        if (remainingTime > 0) {
+          let minutes = Math.floor(remainingTime / 60000);
+          let seconds = Math.floor((remainingTime % 60000) / 1000);
+
+          document.getElementById("clock").innerText = `${String(
+            minutes
+          ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        } else {
+          clearInterval(timerIntervalId);
+          document.getElementById("clock").innerText = "00:00";
+        }
       }
     </script>
     <link
@@ -116,7 +165,7 @@
         justify-content: space-between;
         align-items: center;
       }
-      .clock {
+      .timer {
         color: rgb(255, 255, 255);
         font-family: "JetBrains Mono", monospace;
         font-weight: bold;
@@ -125,7 +174,15 @@
       .exam-info {
         color: rgb(255, 255, 255);
         font-family: Helvetica, sans-serif;
+        font-size: 3vw;
+      }
+      .time {
         font-weight: 600;
+      }
+      .clock {
+        font-weight: 600;
+        color: rgb(255, 255, 255);
+        font-family: Helvetica, sans-serif;
         font-size: 3.5vw;
       }
       .notice {
@@ -134,16 +191,14 @@
         font-weight: 300;
         font-size: 2.5vw;
         max-width: 80vw;
-        margin-top: 1.25rem; /* 5 units */
+        margin-top: 1.25rem;
       }
       .title {
-        margin: 1.25rem; /* 5 units */
-        /* margin-top: 0; */
+        margin: 1.25rem;
         font-weight: 600;
         color: rgb(255, 255, 255);
         font-family: Helvetica, sans-serif;
         text-decoration: none;
-        font-size: 1.125rem; /* text-lg equivalent */
         font-size: 24px;
       }
       .toggle {
@@ -152,20 +207,29 @@
       }
     </style>
   </head>
-  <body onload="startTime()">
+  <body onload="load()">
     <div class="fullscreen-container">
-      <div class="clock" id="clock">16:43</div>
-      <div class="exam-info">Exam starts at 1:25 and ends at 2:15</div>
-      <div class="notice">We will not answer questions about exam content</div>
+      <div class="clock" id="current-time"></div>
+      <div class="timer" id="clock">50:00</div>
+      <div class="exam-info">
+        Started at <span class="time" id="start-time">N/A</span>, ending at
+        <span class="time" id="end-time">N/A</span>
+      </div>
+      <div class="notice">Good luck!</div>
     </div>
     <div class="header">
       <a href="" class="title">CS 3110 Exam 2 — Fall 2024</a>
-      <span
-        id="fs"
-        onclick="toggleFullscreen()"
-        class="material-symbols-outlined toggle"
-        >fullscreen</span
-      >
+      <div>
+        <span onclick="startTimer()" class="material-symbols-outlined toggle"
+          >play_arrow</span
+        >
+        <span
+          id="fs"
+          onclick="toggleFullscreen()"
+          class="material-symbols-outlined toggle"
+          >fullscreen</span
+        >
+      </div>
     </div>
   </body>
 </html>
