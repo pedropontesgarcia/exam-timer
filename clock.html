@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        let params = new URLSearchParams(document.location.search);
+        let className = params.get("class") ?? "CS 3410";
+        let examName = params.get("exam") ?? "Exam";
+        let semester = params.get("semester") ?? "Fall 2025";
+        let totalTime = parseInt(params.get("time"), 50);
+        document.getElementById("title").innerText = `${className} ${examName} — ${semester}`;
+        
         let idleMouseTimer;
         let forceMouseHide = false;
 
@@ -70,7 +77,7 @@
       }
 
       function startTimer() {
-        let d = 50;
+        let d = totalTime;
         duration = d * 60 * 1000;
 
         startTime = Date.now();
@@ -223,7 +230,7 @@
       <div class="notice" id="notice">Good luck!</div>
     </div>
     <div class="header">
-      <a href="" class="title">CS 3110 Exam 3 — Fall 2024</a>
+      <a href="" class="title" id="title"></a>
       <div>
         <span
           id="btn"
