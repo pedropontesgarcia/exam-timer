@@ -122,12 +122,12 @@
           let minutes = Math.floor((remainingTime % 3600000) / 60000);
           let seconds = Math.floor((remainingTime % 60000) / 1000);
 
-          let hS = String(hours).padStart(2, "0");
+          let hS = String(hours);
           let mS = String(minutes).padStart(2, "0");
           let sS = String(seconds).padStart(2, "0");
 
           document.getElementById("clock").innerText =
-            hours > 0 ? `${hS}:${mS}:${sS}` : `${mS}:${sS}`;
+            hours > 0 ? `${hS}h ${mS}m` : `${mS}:${sS}`;
         } else {
           clearInterval(timerIntervalId);
           document.getElementById("clock").innerText = "00:00";
