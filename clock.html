@@ -5,14 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
+      let params = new URLSearchParams(document.location.search);
+      let className = params.get("class") ?? "CS 3410";
+      let examName = params.get("exam") ?? "Exam";
+      let semester = params.get("semester") ?? "Fall 2025";
+      let totalTime = parseInt(params.get("time"), 50);
       document.addEventListener("DOMContentLoaded", () => {
-        let params = new URLSearchParams(document.location.search);
-        let className = params.get("class") ?? "CS 3410";
-        let examName = params.get("exam") ?? "Exam";
-        let semester = params.get("semester") ?? "Fall 2025";
-        let totalTime = parseInt(params.get("time"), 50);
         document.getElementById("title").innerText = `${className} ${examName} — ${semester}`;
-        
+
         let idleMouseTimer;
         let forceMouseHide = false;
 
